@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
@@ -66,10 +67,15 @@ public class HazelcastAsyncMultiMap<K, V> implements AsyncMultiMap<K, V>, EntryL
 
   @Override
   public void removeAllForValue(V val, Handler<AsyncResult<Void>> completionHandler) {
+    removeAll(val::equals, completionHandler);
+  }
+
+  @Override
+  public void removeAll(Predicate<V> p, Handler<AsyncResult<Void>> completionHandler) {
     vertx.executeBlocking(fut -> {
       for (Map.Entry<K, V> entry : map.entrySet()) {
         V v = entry.getValue();
-        if (val.equals(v)) {
+        if (p.test(v)) {
           map.remove(entry.getKey(), v);
         }
       }
