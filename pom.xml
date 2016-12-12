@@ -4,6 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <repositories>
+    <repository>
+      <id>disco-ivy</id>
+      <url>http://disco-ivy.s3-website-eu-west-1.amazonaws.com/</url>
+    </repository>
+  </repositories>
+
   <parent>
     <groupId>io.vertx</groupId>
     <artifactId>vertx-parent</artifactId>
@@ -11,7 +18,7 @@
   </parent>
 
   <artifactId>vertx-hazelcast</artifactId>
-  <version>3.3.3</version>
+  <version>3.3.302</version>
 
   <name>Vert.x Hazelcast Cluster Manager</name>
 
@@ -38,6 +45,7 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
+      <version>3.3.302</version>
     </dependency>
     <dependency>
       <groupId>com.hazelcast</groupId>
