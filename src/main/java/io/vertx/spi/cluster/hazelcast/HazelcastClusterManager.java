@@ -326,7 +326,8 @@ public class HazelcastClusterManager implements ExtendedClusterManager, Membersh
       for(Member m : removedMembers) {
         nodeListener.nodeLeft(m.getUuid());
       }
-      members = currentMembers;
+      members.clear();
+      members.addAll(currentMembers);
     }
   }
 
