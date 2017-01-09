@@ -86,7 +86,7 @@ public class HazelcastAsyncMultiMap<K, V> implements AsyncMultiMap<K, V>, EntryL
   @Override
   public void add(K k, V v, Handler<AsyncResult<Void>> completionHandler) {
     vertx.executeBlocking(fut -> {
-      map.put(k, HazelcastServerID.convertServerID(v));
+      map.put(k, HazelcastClusterNodeInfo.convertClusterNodeInfo(v));
       fut.complete();
     }, completionHandler);
   }
@@ -126,7 +126,7 @@ public class HazelcastAsyncMultiMap<K, V> implements AsyncMultiMap<K, V>, EntryL
 
   @Override
   public void remove(K k, V v, Handler<AsyncResult<Boolean>> completionHandler) {
-    vertx.executeBlocking(fut -> fut.complete(map.remove(k, HazelcastServerID.convertServerID(v))), completionHandler);
+    vertx.executeBlocking(fut -> fut.complete(map.remove(k, HazelcastClusterNodeInfo.convertClusterNodeInfo(v))), completionHandler);
   }
 
   @Override
