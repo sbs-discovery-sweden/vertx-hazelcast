@@ -181,12 +181,15 @@ public class HazelcastAsyncMultiMap<K, V> implements AsyncMultiMap<K, V>, EntryL
 
   @Override
   public void mapEvicted(MapEvent mapEvent) {
-    cache.clear();
+    clearCache();
   }
 
   @Override
   public void mapCleared(MapEvent mapEvent) {
-    cache.clear();
+    clearCache();
   }
 
+  public void clearCache() {
+    cache.clear();
+  }
 }
