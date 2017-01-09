@@ -18,12 +18,23 @@ package io.vertx.spi.cluster.hazelcast;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.XmlConfigBuilder;
-import com.hazelcast.core.*;
+import com.hazelcast.core.AsyncAtomicLong;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IAtomicLong;
+import com.hazelcast.core.ILock;
+import com.hazelcast.core.IMap;
+import com.hazelcast.core.ISemaphore;
+import com.hazelcast.core.LifecycleEvent;
+import com.hazelcast.core.LifecycleListener;
+import com.hazelcast.core.Member;
+import com.hazelcast.core.MemberAttributeEvent;
+import com.hazelcast.core.MembershipEvent;
+import com.hazelcast.core.MembershipListener;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
-import io.vertx.core.impl.ConcurrentHashSet;
 import io.vertx.core.impl.ExtendedClusterManager;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -43,7 +54,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -92,7 +108,7 @@ public class HazelcastClusterManager implements ExtendedClusterManager, Membersh
   private String membershipListenerId;
   private String lifecycleListenerId;
   private boolean customHazelcastCluster;
-  private Set<Member> members = new ConcurrentHashSet<>();
+  private Set<Member> members = new HashSet<>();
 
   private NodeListener nodeListener;
   private volatile boolean active;
@@ -326,8 +342,7 @@ public class HazelcastClusterManager implements ExtendedClusterManager, Membersh
       for(Member m : removedMembers) {
         nodeListener.nodeLeft(m.getUuid());
       }
-      members.clear();
-      members.addAll(currentMembers);
+      members.retainAll(currentMembers);
     }
   }
 
